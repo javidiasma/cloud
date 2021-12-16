@@ -1,13 +1,11 @@
 package main
 
 import (
-	"fmt"
-	"github.com/gin-gonic/gin"
+	"cloudPart1/routes"
 )
 
 func main() {
-	r := gin.Default()
-
+	//config.ConnectDatabase()
+	r := routes.SetupRoutes()
 	r.Run("0.0.0.0:8000")
-	fmt.Println(1)
 }

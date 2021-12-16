@@ -1,8 +1,7 @@
 package config
 
 import (
-	"awesomeProject/models/DAO"
-	"fmt"
+	"cloudPart1/models/DAO"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/sqlite"
 )
@@ -14,6 +13,6 @@ func ConnectDatabase() {
 	if err != nil {
 		panic("failed to connect database")
 	}
-	database.AutoMigrate(DAO.History{})
-	fmt.Println(1)
+	database.AutoMigrate(&DAO.History{})
+	DB = database
 }
