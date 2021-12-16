@@ -7,11 +7,17 @@ import (
 
 func SetupRoutes() *gin.Engine {
 
-	// use the Default router from Gin and add the endpoints by indicating the
-	// HTTP Method to use with the corresponding Function
 	router := gin.Default()
-	router.GET("/byRank/:rank", controller.ByRank)
-	router.POST("/createDB/", controller.Database)
 
+	router.GET("/createDB/", controller.CreateDB)
+	//"/byRank/:rank"
+	router.GET("/getDB/", controller.GetDB)
+	router.GET("/byRank/:rank", controller.GetByRank)
+	router.GET("/byName/:name", controller.GetByName)
+	router.GET("/byPlatform/:platform/:num", controller.GetByPlatform)
+	router.GET("/byYear/:year/:num", controller.GetByYear)
+	router.GET("/byGenre/:genre/:num", controller.GetByGenre)
+	router.GET("/by5BestSellers/:year/:platform", controller.GetByBestSellers)
+	router.GET("/byEUMoreThanNA/", controller.GetEUMoreThanNA)
 	return router
 }

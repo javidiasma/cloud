@@ -17,10 +17,12 @@ func ReturnByRank(rank int) []DAO.History {
 	config.DB.Where(&DAO.History{Rank: rank}).Find(&history)
 	return history
 }
-func ReturnBy() {
 
-}
-func CreateDB(history DAO.History) DAO.History {
+//func ReturnBy() {
+//
+//}
+
+func CreateDatabase(history DAO.History) DAO.History {
 	tempHistory := DAO.History{
 		Rank:         history.Rank,
 		Name:         history.Name,
@@ -41,12 +43,12 @@ func CreateDB(history DAO.History) DAO.History {
 func CsvReader() (map[int]DAO.History, error) {
 	returnMap := make(map[int]DAO.History)
 	var count int
-	csvfile, err := os.Open(csvReader.FilePath)
+	csvFile, err := os.Open(csvReader.FilePath)
 	if err != nil {
 
 		return nil, fmt.Errorf(err.Error())
 	}
-	reader := csv.NewReader(csvfile)
+	reader := csv.NewReader(csvFile)
 	var header []string
 	for {
 		rawCSVData, err2 := reader.Read()
@@ -104,9 +106,86 @@ func CsvReader() (map[int]DAO.History, error) {
 				Other_Sales:  float32(otherSales),
 				Global_Sales: float32(globalSales),
 			}
-			CreateDB(returnMap[count])
+			CreateDatabase(returnMap[count])
+			//config.DB.Create(returnMap[count])
 		}
+		//CreateDatabase(&returnMap)
 
 	}
 	return returnMap, err
+}
+
+func GetDatabase() ([]DAO.History, error) {
+	var histories []DAO.History
+	err := config.DB.Model(&DAO.History{}).Find(&histories)
+	if err.Error != nil {
+		return nil, err.Error
+	}
+	return histories, nil
+}
+
+func GetByRank(rank int) ([]DAO.History, error) {
+	var histories []DAO.History
+	err := config.DB.Where(&DAO.History{Rank: rank}).Find(&histories).Error
+	if err != nil {
+		return nil, err
+	}
+	return histories, nil
+}
+
+//
+
+func GetByName(name string) ([]DAO.History, error) {
+	var histories []DAO.History
+	err := config.DB.Where("name LIKE ?", "%"+name+"%").Find(&histories).Error
+	if err != nil {
+		return nil, err
+	}
+	return histories, nil
+}
+
+func GetByPlatform(platform string, num int) ([]DAO.History, error) {
+	var histories []DAO.History
+	//Limit(num)
+	err := config.DB.Where(&DAO.History{Platform: platform}).Limit(num).Find(&histories).Error
+	if err != nil {
+		return nil, err
+	}
+	return histories, nil
+}
+
+func GetByYear(year int, num int) ([]DAO.History, error) {
+	var histories []DAO.History
+	err := config.DB.Where(&DAO.History{Year: year}).Limit(num).Find(&histories).Error
+	if err != nil {
+		return nil, err
+	}
+	return histories, nil
+}
+
+func GetByGenre(genre string, num int) ([]DAO.History, error) {
+	var histories []DAO.History
+	err := config.DB.Where(&DAO.History{Genre: genre}).Limit(num).Find(&histories).Error
+	if err != nil {
+		return nil, err
+	}
+	return histories, nil
+}
+
+func GetByBestSellers(year int, platform string) ([]DAO.History, error) {
+	var histories []DAO.History
+	err := config.DB.Where(&DAO.History{Year: year, Platform: platform}).Select("max(Global_Sales)").Limit(5).Find(&histories).Error
+	if err != nil {
+		return nil, err
+	}
+	return histories, nil
+}
+
+func GetEUMoreThanNA() ([]DAO.History, error) {
+	var histories []DAO.History
+	err := config.DB.Where("EU_Sales > ?", "NA_Sales").Find(&histories).Error
+	if err != nil {
+		return nil, err
+	}
+	return histories, nil
 }
