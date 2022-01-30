@@ -2,6 +2,7 @@ package controller
 
 import (
 	"cloudPart1/DAL"
+	"cloudPart1/csvReader"
 	"fmt"
 	"strconv"
 
@@ -9,23 +10,22 @@ import (
 	"net/http"
 )
 
-func ByRank(c *gin.Context) {
-
-	rank, _ := strconv.Atoi(c.Param("rank"))
-
-	data := DAL.ReturnByRank(rank)
-	if len(data) == 0 {
-		c.JSON(http.StatusBadRequest, gin.H{"message": "error exits"})
-		return
-	} else {
-		c.JSON(http.StatusOK, data)
-		return
-	}
-}
+//func ByRank(c *gin.Context) {
+//
+//	rank, _ := strconv.Atoi(c.Param("rank"))
+//	data := DAL.ReturnByRank(rank)
+//	if len(data) == 0 {
+//		c.JSON(http.StatusBadRequest, gin.H{"message": "error exits"})
+//		return
+//	} else {
+//		c.JSON(http.StatusOK, data)
+//		return
+//	}
+//}
 
 func CreateDB(c *gin.Context) {
 	fmt.Println(1)
-	_, err := DAL.CsvReader()
+	_, err := csvReader.CsvReader()
 	if err != nil {
 		c.JSON(http.StatusBadRequest, err.Error())
 		return

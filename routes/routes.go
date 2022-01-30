@@ -8,9 +8,8 @@ import (
 func SetupRoutes() *gin.Engine {
 
 	router := gin.Default()
-
-	router.GET("/createDB/", controller.CreateDB)
-	//"/byRank/:rank"
+	router.Use(controller.Authentication())
+	router.POST("/createDB/", controller.CreateDB)
 	router.GET("/getDB/", controller.GetDB)
 	router.GET("/byRank/:rank", controller.GetByRank)
 	router.GET("/byName/:name", controller.GetByName)
